@@ -1,51 +1,56 @@
 state_code,state_name,capital,became_a_state
-1,AL,Alabama,Montgomery,December 14 1819
-2,AK,Alaska,Juneau,January 3 1959
-3,AZ,Arizona,Phoenix,February 14 1912
-4,AR,Arkansas,LittleRock,June 15 1836
-5,CA,California,Sacramento,September 9 1850
-6,CO,Colorado,Denver,August 1 1876
-7,CT,Connecticut,Hartford,January 9 1788
-8,DE,Delaware,Dover,December 7 1787
-9,FL,Florida,Tallahassee,March 3 1845
-10,GA,Georgia,Atlanta,January 2 1788
-11,HI,Hawaii,Honolulu,August 21 1959
-12,ID,Idaho,Boise,July 3 1890
-13,IL,Illinois,Springfield,December 3 1818
-14,IN,Indiana,Indianapolis,December 11 1816
-15,IA,Iowa,DesMoines,December 28 1846
-16,KS,Kansas,Topeka,January 29 1861
-17,KY,Kentucky,Frankfort,June 1 1792
-18,LA,Louisiana,BatonRouge,April 30 1812
-19,ME,Maine,Augusta,March 15 1820
-20,MD,Maryland,Annapolis,April 28 1788
-21,MA,Massachusetts,Boston,February 6 1788
-22,MI,Michigan,Lansing,January 26 1837
-23,MN,Minnesota,SaintPaul,May 11 1858
-24,MS,Mississippi,Jackson,December 10 1817
-25,MO,Missouri,JeffersonCity,August 10 1821
-26,MT,Montana,Helena,November 8 1889
-27,NE,Nebraska,Lincoln,March 1 1867
-28,NV,Nevada,CarsonCity,October 31 1864
-29,NH,NewHampshire,Concord,June 21 1788
-30,NJ,NewJersey,Trenton,December 18 1787
-31,NM,NewMexico,SantaFe,January 6 1912
-32,NY,NewYork,Albany,July 26 1788
-33,NC,NorthCarolina,Raleigh,November 21 1789
-34,ND,NorthDakota,Bismarck,November 2 1889
-35,OH,Ohio,Columbus,March 1 1803
-36,OK,Oklahoma,OklahomaCity,November 16 1907
-37,OR,Oregon,Salem,February 14 1859
-38,PA,Pennsylvania,Harrisburg,December 12 1787
-39,RI,RhodeIsland,Providence,May 19 1790
-40,SC,SouthCarolina,Columbia,May 23 1788
-41,SD,SouthDakota,Pierre,November 2 1889
-42,TN,Tennessee,Nashville,June 1 1796
-43,TX,Texas,Austin,December 29 1845
-44,UT,Utah,SaltLakeCity,January 4 1896
-45,VT,Vermont,Montpelier,March 4 1791
-46,VA,Virginia,Richmond,June 25 1788
-47,WA,Washington,Olympia,November 11 1889
-48,WV,WestVirginia,Charleston,June 20 1863
-49,WI,Wisconsin,Madison,May 29 1848
-50,WY,Wyoming,Cheyenne,July 10 1890
+1,AK,Alaska,Juneau,January 3 1959
+2,AL,Alabama,Montgomery,December 14 1819
+3,AR,Arkansas,LittleRock,June 15 1836
+4,AS,American Samoa,Pago Pago,June 14 1889
+5,AZ,Arizona,Phoenix,February 14 1912
+6,CA,California,Sacramento,September 9 1850
+7,CO,Colorado,Denver,August 1 1876
+8,CT,Connecticut,Hartford,January 9 1788
+9,DC,Ditrict of Columbia,Washington D.C., July 9 1790
+10,DE,Delaware,Dover,December 7 1787
+11,FL,Florida,Tallahassee,March 3 1845
+12,GA,Georgia,Atlanta,January 2 1788
+13,GU,Guam,Hagatna,June 20 1898
+14,HI,Hawaii,Honolulu,August 21 1959
+15,IA,Iowa,Des Moines,December 28 1846
+16,ID,Idaho,Boise,July 3 1890
+17,IL,Illinois,Springfield,December 3 1818
+18,IN,Indiana,Indianapolis,December 11 1816
+19,KS,Kansas,Topeka,January 29 1861
+20,KY,Kentucky,Frankfort,June 1 1792
+21,LA,Louisiana,Baton Rouge,April 30 1812
+22,MA,Massachusetts,Boston,February 6 1788
+23,MD,Maryland,Annapolis,April 28 1788
+24,ME,Maine,Augusta,March 15 1820
+25,MI,Michigan,Lansing,January 26 1837
+26,MN,Minnesota,SaintPaul,May 11 1858
+27,MO,Missouri,JeffersonCity,August 10 1821
+28,MS,Mississippi,Jackson,December 10 1817
+29,MT,Montana,Helena,November 8 1889
+30,NC,North Carolina,Raleigh,November 21 1789
+31,ND,North Dakota,Bismarck,November 2 1889
+32,NE,Nebraska,Lincoln,March 1 1867
+33,NH,New Hampshire,Concord,June 21 1788
+34,NJ,New Jersey,Trenton,December 18 1787
+35,NM,New Mexico,Santa Fe,January 6 1912
+36,NV,Nevada,Carson City,October 31 1864
+37,NY,NewYork,Albany,July 26 1788
+38,OH,Ohio,Columbus,March 1 1803
+39,OK,Oklahoma,Oklahoma City,November 16 1907
+40,OR,Oregon,Salem,February 14 1859
+41,PA,Pennsylvania,Harrisburg,December 12 1787
+42,PR,Puerto Rico,San Juan,December 10 1898
+43,RI,Rhode Island,Providence,May 19 1790
+44,SC,South Carolina,Columbia,May 23 1788
+45,SD,South Dakota,Pierre,November 2 1889
+46,TN,Tennessee,Nashville,June 1 1796
+47,TX,Texas,Austin,December 29 1845
+48,UT,Utah,Salt Lake City,January 4 1896
+49,VA,Virginia,Richmond,June 25 1788
+50,VI,Virgin Islands,Charlotte Amalie,March 31 1917
+51,VT,Vermont,Montpelier,March 4 1791
+52,WA,Washington,Olympia,November 11 1889
+53,WI,Wisconsin,Madison,May 29 1848
+54,WV,West Virginia,Charleston,June 20 1863
+55,WY,Wyoming,Cheyenne,July 10 1899

@@ -1,25 +1,54 @@
+########################################################################################
+#                                                                                      #
+#                                                                                      #
+#                                                                                      #
+#                                                                                      #
+########################################################################################
+
+# Libraries required
 library(jsonlite)
 library(dplyr)
 library(stringr)
 
-#states.data = readLines('data/us-states.geojson') %>% paste(collapse = '\n') %>% fromJSON(simplifyVector = FALSE)
-counties.geo = readLines('data/us-counties.geojson') %>% paste(collapse = '\n') %>% fromJSON(simplifyVector = FALSE)
-
+# Load basic datasets to get all geographic data
 states.data = read.csv('data/us-states.csv')
 counties.data = read.csv('data/us-counties.csv')
 
-#us.elections.0816 = read.csv('data/US_County_Level_Presidential_Results_08-16.csv')
-#us.elections.1216 = read.csv('data/US_County_Level_Presidential_Results_12-16.csv')
-
-#counties_list <- unlist(lapply(counties.data[['features']], function(feat) { feat$properties$name })) %>%
-#  unique() %>% sort()
-
+# Convert FIPS code for State and County to a supported format
 counties.data$fips_state  <- str_pad(as.character(counties.data$fips_state),  2, "left", "0")
 counties.data$fips_county <- str_pad(as.character(counties.data$fips_county), 3, "left", "0")
 
+# Remove the ' County' suffix
+# counties.data$county_name <- str_replace(counties.data$county_name, " County", "")
+
+# Join the two datasets and get the right columns
 counties.data <- inner_join(states.data, counties.data, "state_code") %>%
   mutate(fips_code = str_c(fips_state, fips_county)) %>%
   select(state_code, state_name, capital, fips_code, county_name, fips_class)
-  
 
-counties.data$county_name <- str_replace(counties.data$county_name, " County", "")
+# Remove States data. We don't need it anymore.
+rm(states.data)
+
+# Load US Elections datasets
+us.elections.0816 = read.csv('data/US_County_Level_Presidential_Results_08-16.csv')
+#us.elections.1216 = read.csv('data/US_County_Level_Presidential_Results_12-16.csv')
+
+# Convert FIPS code to reflect the Counties dataset
+us.elections.0816$fips_code <- str_pad(as.character(us.elections.0816$fips_code), 5, "left", "0")
+#us.elections.1216$fips_code <- str_pad(us.elections.0816$fips_code, 5, "left", "0")
+
+us.elections0812.data = inner_join(counties.data, us.elections.0816, "fips_code")
+#us.elections1216.data = inner_join(counties.data, us.elections.1216, "fips_code")
+
+rm(counties.data)
+rm(us.elections.0816)
+
+#states.data = readLines('data/us-states.geojson') %>% paste(collapse = '\n') %>% fromJSON(simplifyVector = FALSE)
+counties.geo = readLines('data/us-counties.geojson') %>%
+  paste(collapse = '\n') %>%
+  fromJSON(simplifyVector = FALSE)
+
+counties_list <- unlist(
+    lapply(
+      counties.geo[['features']], function(feat) { feat$properties$NAME })) %>%
+  unique() %>% sort()
