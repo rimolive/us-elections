@@ -19,7 +19,7 @@ counties.data$fips_state  <- str_pad(as.character(counties.data$fips_state),  2,
 counties.data$fips_county <- str_pad(as.character(counties.data$fips_county), 3, "left", "0")
 
 # Remove the ' County' suffix
-# counties.data$county_name <- str_replace(counties.data$county_name, " County", "")
+counties.data$county_name <- str_replace(counties.data$county_name, " County", "")
 
 # Join the two datasets and get the right columns
 counties.data <- inner_join(states.data, counties.data, "state_code") %>%
@@ -48,7 +48,46 @@ counties.geo = readLines('data/us-counties.geojson') %>%
   paste(collapse = '\n') %>%
   fromJSON(simplifyVector = FALSE)
 
-counties_list <- unlist(
-    lapply(
-      counties.geo[['features']], function(feat) { feat$properties$NAME })) %>%
-  unique() %>% sort()
+counties_list <- unlist(lapply(counties.geo[['features']], function(feat) {
+  unlist(lapply(feat[['counties']], function(county) {
+    county[['name']]
+  }))
+})) %>%
+  sort()
+
+for(state in counties.geo[['features']]) {
+  state_name <- state[['properties']][['state']]
+
+  for(county in state[['counties']]) {
+    county_name <- county[['name']]
+    
+    county.info <- us.elections0812.data[
+        which(us.elections0812.data$state_code == state_name &
+              us.elections0812.data$county_name == county_name), ]
+    
+    
+  }
+}
+
+which(us.elections0812.data$state_code == 'AL' & us.elections0812.data$county_name == "Autauga")
+
+counties.data <- rgdal::readOGR("data/us-counties.geojson", "OGRGeoJSON")
+
+counties.geo <- data.frame(geo_id = counties.data$GEO_ID,
+                           state_fips = counties.data$STATE,
+                           county_fips = counties.data$COUNTY,
+                           county_name = counties.data$NAME,
+                           lsad = counties.data$LSAD,
+                           fips_code = counties.data$fips_code)
+counties.geo$fips_code <- str_pad(as.character(counties.geo$fips_code), 5, "left", "0")
+
+
+final.data <- right_join(counties.geo, us.elections0812.data, "fips_code")
+
+
+
+counties.data <- final.data
+
+
+
+
