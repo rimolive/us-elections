@@ -31,19 +31,17 @@ rm(states.data)
 
 # Load US Elections datasets
 us.elections.0816 = read.csv('data/US_County_Level_Presidential_Results_08-16.csv')
-#us.elections.1216 = read.csv('data/US_County_Level_Presidential_Results_12-16.csv')
 
 # Convert FIPS code to reflect the Counties dataset
 us.elections.0816$fips_code <- str_pad(as.character(us.elections.0816$fips_code), 5, "left", "0")
-#us.elections.1216$fips_code <- str_pad(us.elections.0816$fips_code, 5, "left", "0")
 
 us.elections0812.data = inner_join(counties.data, us.elections.0816, "fips_code")
-#us.elections1216.data = inner_join(counties.data, us.elections.1216, "fips_code")
 
 rm(counties.data)
 rm(us.elections.0816)
 
-#states.data = readLines('data/us-states.geojson') %>% paste(collapse = '\n') %>% fromJSON(simplifyVector = FALSE)
+write.csv(us.elections0812.data, 'data/us-elections.csv')
+
 counties.geo = readLines('data/us-counties.geojson') %>%
   paste(collapse = '\n') %>%
   fromJSON(simplifyVector = FALSE)
@@ -71,24 +69,19 @@ for(state in counties.geo[['features']]) {
 
 which(us.elections0812.data$state_code == 'AL' & us.elections0812.data$county_name == "Autauga")
 
-counties.data <- rgdal::readOGR("data/us-counties_ORIGINAL.geojson", "OGRGeoJSON")
+counties.data <- rgdal::readOGR("data/us-elections.geojson", "OGRGeoJSON")
 
 counties.geo <- data.frame(geo_id = counties.data$GEO_ID,
                            state_fips = counties.data$STATE,
                            county_fips = counties.data$COUNTY,
                            county_name = counties.data$NAME,
                            lsad = counties.data$LSAD,
-                           fips_code = counties.data$fips_code)
-counties.geo$fips_code <- str_pad(as.character(counties.geo$fips_code), 5, "left", "0")
+                           fips_code = counties.data$FIPSCODE)
+  counties.geo$fips_code <- str_pad(as.character(counties.geo$fips_code), 5, "left", "0")
 
 final.data <- right_join(counties.geo, us.elections0812.data, "fips_code")
 
-convertcsv <- convertcsv %>%
-  mutate(fips_code = paste(STATE, COUNTY, sep=""))
-
-right_join(convertcsv, final.data, "fips_code")
-
-write.csv(geo.data, "data/geo_data.csv")
+write.csv(geo.data, "data/full.csv")
 
 geojson <- readLines("data/us-elections.geojson", warn = FALSE) %>%
   paste(collapse = "\n") %>%

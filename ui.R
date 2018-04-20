@@ -25,9 +25,24 @@ navbarPage("US Elections", id="nav",
   ),
   
   tabPanel("Data Explorer",
+    fluidRow(
+      column(3,
+        selectInput("states", "States", c("All states"="", structure(state.abb, names=state.name), "Washington, DC"="DC"), multiple=TRUE)
+      ),
+      column(3,
+        conditionalPanel("input.states",
+          selectInput("counties", "Counties", c("All counties"=""), multiple=TRUE)
+        )
+      )
+    ),
+    
     hr(),
     DT::dataTableOutput("us_elections_history")
   ),
+  
+  tabPanel("Vizualizations",
+      
+  )
   
   conditionalPanel("false", icon("crosshair"))
 )
