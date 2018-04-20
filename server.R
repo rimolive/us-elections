@@ -25,8 +25,15 @@ function(input, output, session) {
                 labFormat = labelFormat(transform = function(x) x))
   })
   
-  
-  
+  output$us_elections_history <- DT::renderDataTable({
+    df <- us_elections_history %>%
+      select(county, total_2008, dem_2008, gop_2008, oth_2008, total_2012, dem_2012, gop_2012, oth_2012, total_2016, dem_2016, gop_2016, oth_2016)
+    #%>%
+    #  mutate(Action = paste('<a class="go-map" href="" data-lat="', Lat, '" data-long="', Long, '" data-zip="', Zipcode, '"><i class="fa fa-crosshairs"></i></a>', sep=""))
+    action <- DT::dataTableAjax(session, df)
+    
+    DT::datatable(df, options = list(ajax = list(url = action)), escape = FALSE)
+  })
   
 }
 

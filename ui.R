@@ -26,7 +26,7 @@ navbarPage("US Elections", id="nav",
   
   tabPanel("Data Explorer",
     hr(),
-    DT::datatable(us_elections_history)
+    DT::dataTableOutput("us_elections_history")
   ),
   
   conditionalPanel("false", icon("crosshair"))
