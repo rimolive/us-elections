@@ -71,7 +71,7 @@ for(state in counties.geo[['features']]) {
 
 which(us.elections0812.data$state_code == 'AL' & us.elections0812.data$county_name == "Autauga")
 
-counties.data <- rgdal::readOGR("data/us-counties.geojson", "OGRGeoJSON")
+counties.data <- rgdal::readOGR("data/us-counties_ORIGINAL.geojson", "OGRGeoJSON")
 
 counties.geo <- data.frame(geo_id = counties.data$GEO_ID,
                            state_fips = counties.data$STATE,
@@ -81,13 +81,16 @@ counties.geo <- data.frame(geo_id = counties.data$GEO_ID,
                            fips_code = counties.data$fips_code)
 counties.geo$fips_code <- str_pad(as.character(counties.geo$fips_code), 5, "left", "0")
 
-
 final.data <- right_join(counties.geo, us.elections0812.data, "fips_code")
 
+convertcsv <- convertcsv %>%
+  mutate(fips_code = paste(STATE, COUNTY, sep=""))
 
+right_join(convertcsv, final.data, "fips_code")
 
-counties.data <- final.data
+write.csv(geo.data, "data/geo_data.csv")
 
-
-
+geojson <- readLines("data/us-counties_ORIGINAL.geojson", warn = FALSE) %>%
+  paste(collapse = "\n") %>%
+  fromJSON(simplifyVector = FALSE)
 
