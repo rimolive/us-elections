@@ -22,5 +22,12 @@ navbarPage("US Elections", id="nav",
         'Data compiled for ', tags$em('US election 2016: How to download county-level results data'), ' by Simon Rogers.'
       )
     )
-  )
+  ),
+  
+  tabPanel("Data Explorer",
+    hr(),
+    DT::datatable(us_elections_history)
+  ),
+  
+  conditionalPanel("false", icon("crosshair"))
 )

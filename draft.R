@@ -90,7 +90,7 @@ right_join(convertcsv, final.data, "fips_code")
 
 write.csv(geo.data, "data/geo_data.csv")
 
-geojson <- readLines("data/us-counties_ORIGINAL.geojson", warn = FALSE) %>%
+geojson <- readLines("data/us-elections.geojson", warn = FALSE) %>%
   paste(collapse = "\n") %>%
   fromJSON(simplifyVector = FALSE)
 
