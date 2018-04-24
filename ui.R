@@ -40,9 +40,9 @@ navbarPage("US Elections", id="nav",
     DT::dataTableOutput("us_elections_history")
   ),
   
-  tabPanel("Vizualizations",
-      
-  )
+  tabPanel("Visualizations",
+    plotOutput("plot", height = 600)
+  ),
   
   conditionalPanel("false", icon("crosshair"))
 )

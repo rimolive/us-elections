@@ -9,6 +9,7 @@
 library(jsonlite)
 library(dplyr)
 library(stringr)
+library(ggplot2)
 
 # Load basic datasets to get all geographic data
 states.data = read.csv('data/us-states.csv')
@@ -87,3 +88,13 @@ geojson <- readLines("data/us-elections.geojson", warn = FALSE) %>%
   paste(collapse = "\n") %>%
   fromJSON(simplifyVector = FALSE)
 
+plot.data <- us.elections0812.data %>%
+  group_by(state_name) %>%
+  summarise(total_2008 = sum(total_2008)) %>%
+  arrange(desc(total_2008))
+
+plot.data$state_name <- factor(plot.data$state_name, levels = plot.data$state_name)
+
+ggplot(plot.data, aes(state_name, total_2008)) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  geom_bar(stat='identity')

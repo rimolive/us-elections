@@ -3,10 +3,24 @@ library(RColorBrewer)
 library(scales)
 library(lattice)
 library(dplyr)
+library(ggplot2)
 
 set.seed(100)
 counties.data <- rgdal::readOGR("data/us-elections.geojson", "OGRGeoJSON")
 pal <- colorNumeric("plasma", 1:1000000)
+
+plot_data <- function() {
+  plot.data <- us.elections0812.data %>%
+    group_by(state_name) %>%
+    summarise(total_2008 = sum(total_2008)) %>%
+    arrange(desc(total_2008))
+  
+  plot.data$state_name <- factor(plot.data$state_name, levels = plot.data$state_name)
+  
+  ggplot(plot.data, aes(state_name, total_2008)) +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+    geom_bar(stat='identity')
+}
 
 function(input, output, session) {
 
@@ -47,5 +61,8 @@ function(input, output, session) {
     DT::datatable(df, options = list(ajax = list(url = action)), escape = FALSE)
   })
   
+  output$plot <- renderPlot(
+    plot_data()
+  )
+  
 }
-
