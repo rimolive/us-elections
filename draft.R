@@ -98,3 +98,10 @@ plot.data$state_name <- factor(plot.data$state_name, levels = plot.data$state_na
 ggplot(plot.data, aes(state_name, total_2008)) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   geom_bar(stat='identity')
+
+states <- c("Alabama")
+
+counties <- filter(us_elections_history, state_name %in% states) %>%
+  `$`('county_name') %>%
+  unique() %>%
+  sort()

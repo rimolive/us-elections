@@ -6,4 +6,5 @@ scales
 lattice
 jsonlite
 rgdal
+ggplot2
 DT

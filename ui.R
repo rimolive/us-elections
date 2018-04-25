@@ -41,6 +41,10 @@ navbarPage("US Elections", id="nav",
   ),
   
   tabPanel("Visualizations",
+    fluidRow(
+      column(3,
+             selectInput("elections", "Election Year", c("2008"="2008", "2012"="2012", "2016"="2016")))
+    ),
     plotOutput("plot", height = 600)
   ),
   

@@ -9,19 +9,6 @@ set.seed(100)
 counties.data <- rgdal::readOGR("data/us-elections.geojson", "OGRGeoJSON")
 pal <- colorNumeric("plasma", 1:1000000)
 
-plot_data <- function() {
-  plot.data <- us.elections0812.data %>%
-    group_by(state_name) %>%
-    summarise(total_2008 = sum(total_2008)) %>%
-    arrange(desc(total_2008))
-  
-  plot.data$state_name <- factor(plot.data$state_name, levels = plot.data$state_name)
-  
-  ggplot(plot.data, aes(state_name, total_2008)) +
-    theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-    geom_bar(stat='identity')
-}
-
 function(input, output, session) {
 
   # Create the map
@@ -42,7 +29,7 @@ function(input, output, session) {
   observe({
     counties <- if (is.null(input$states)) character(0) else {
       filter(us_elections_history, state_name %in% input$states) %>%
-        `$`('counties') %>%
+        `$`('county_name') %>%
         unique() %>%
         sort()
     }
@@ -53,12 +40,44 @@ function(input, output, session) {
   
   output$us_elections_history <- DT::renderDataTable({
     df <- us_elections_history %>%
+      filter(
+        is.null(input$states) | state_name %in% input$states,
+        is.null(input$counties) | county_name %in% input$counties
+      ) %>%
       select(state_name, county_name, total_2008, dem_2008, gop_2008, oth_2008, total_2012, dem_2012, gop_2012, oth_2012, total_2016, dem_2016, gop_2016, oth_2016)
     #%>%
     #  mutate(Action = paste('<a class="go-map" href="" data-lat="', Lat, '" data-long="', Long, '" data-zip="', Zipcode, '"><i class="fa fa-crosshairs"></i></a>', sep=""))
     action <- DT::dataTableAjax(session, df)
     
     DT::datatable(df, options = list(ajax = list(url = action)), escape = FALSE)
+  })
+  
+  plot_data <- reactive({
+    if(input$elections == "2008") {
+      plot.data <- us_elections_history %>%
+        group_by(state_name) %>%
+        summarise(total_2008 = sum(total_2008)) %>%
+        mutate(elections_total = total_2008) %>%
+        arrange(desc(total_2008))  
+    } else if(input$elections == "2012") {
+      plot.data <- us_elections_history %>%
+        group_by(state_name) %>%
+        summarise(total_2012 = sum(total_2012)) %>%
+        mutate(elections_total = total_2012) %>%
+        arrange(desc(total_2012))  
+    } else if(input$elections == "2016") {
+      plot.data <- us_elections_history %>%
+        group_by(state_name) %>%
+        summarise(total_2016 = sum(total_2016)) %>%
+        mutate(elections_total = total_2016) %>%
+        arrange(desc(total_2016))  
+    }
+    
+    plot.data$state_name <- factor(plot.data$state_name, levels = plot.data$state_name)
+    
+    ggplot(plot.data, aes(state_name, elections_total)) +
+      theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+      geom_bar(stat='identity')
   })
   
   output$plot <- renderPlot(
