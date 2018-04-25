@@ -7,7 +7,8 @@ library(ggplot2)
 
 set.seed(100)
 counties.data <- rgdal::readOGR("data/us-elections.geojson", "OGRGeoJSON")
-pal <- colorNumeric("plasma", 1:1000000)
+pal <- colorNumeric(c('#543005','#8c510a','#bf812d','#dfc27d','#f6e8c3','#f5f5f5','#c7eae5','#80cdc1','#35978f','#01665e','#003c30'), 1:3000000)
+
 
 function(input, output, session) {
 
@@ -22,13 +23,13 @@ function(input, output, session) {
       addPolygons(stroke = FALSE, smoothFactor = 0.3, fillOpacity = 1,
                   fillColor = ~pal(total_2008),
                   label = ~paste0(NAME, ": ", formatC(total_2008, big.mark = ","))) %>%
-      addLegend(pal = pal, values = ~total_2008, opacity = 1.0,
+      addLegend("bottomright", pal = pal, values = ~total_2008, opacity = 1.0,
                 labFormat = labelFormat(transform = function(x) x))
   })
   
   observe({
     counties <- if (is.null(input$states)) character(0) else {
-      filter(us_elections_history, state_name %in% input$states) %>%
+      filter(us_elections_history, state_code %in% input$states) %>%
         `$`('county_name') %>%
         unique() %>%
         sort()
@@ -41,12 +42,10 @@ function(input, output, session) {
   output$us_elections_history <- DT::renderDataTable({
     df <- us_elections_history %>%
       filter(
-        is.null(input$states) | state_name %in% input$states,
+        is.null(input$states) | state_code %in% input$states,
         is.null(input$counties) | county_name %in% input$counties
       ) %>%
-      select(state_name, county_name, total_2008, dem_2008, gop_2008, oth_2008, total_2012, dem_2012, gop_2012, oth_2012, total_2016, dem_2016, gop_2016, oth_2016)
-    #%>%
-    #  mutate(Action = paste('<a class="go-map" href="" data-lat="', Lat, '" data-long="', Long, '" data-zip="', Zipcode, '"><i class="fa fa-crosshairs"></i></a>', sep=""))
+      select(state_name, county_name, party, total_votes_2008, total_votes_2012, total_votes_2016)
     action <- DT::dataTableAjax(session, df)
     
     DT::datatable(df, options = list(ajax = list(url = action)), escape = FALSE)
@@ -55,29 +54,39 @@ function(input, output, session) {
   plot_data <- reactive({
     if(input$elections == "2008") {
       plot.data <- us_elections_history %>%
-        group_by(state_name) %>%
-        summarise(total_2008 = sum(total_2008)) %>%
-        mutate(elections_total = total_2008) %>%
-        arrange(desc(total_2008))  
+        group_by(state_name, party) %>%
+        summarise(total_votes_2008 = sum(total_votes_2008)) %>%
+        mutate(elections_total = total_votes_2008) %>%
+        arrange(desc(elections_total))  
     } else if(input$elections == "2012") {
       plot.data <- us_elections_history %>%
-        group_by(state_name) %>%
-        summarise(total_2012 = sum(total_2012)) %>%
-        mutate(elections_total = total_2012) %>%
-        arrange(desc(total_2012))  
+        group_by(state_name, party) %>%
+        summarise(total_votes_2012 = sum(total_votes_2012)) %>%
+        mutate(elections_total = total_votes_2012) %>%
+        arrange(desc(elections_total))  
     } else if(input$elections == "2016") {
       plot.data <- us_elections_history %>%
-        group_by(state_name) %>%
-        summarise(total_2016 = sum(total_2016)) %>%
-        mutate(elections_total = total_2016) %>%
-        arrange(desc(total_2016))  
+        group_by(state_name, party) %>%
+        summarise(total_votes_2016 = sum(total_votes_2016)) %>%
+        mutate(elections_total = total_votes_2016) %>%
+        arrange(desc(elections_total))  
     }
     
-    plot.data$state_name <- factor(plot.data$state_name, levels = plot.data$state_name)
+    plot.data$state_name <- as.factor(plot.data$state_name)
+
+    if(input$byparty == TRUE) {
+      ggplot(plot.data, aes(state_name, elections_total, fill = party)) +
+        theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+        labs(x="State", y="Votes", title=paste("Votes by State in", input$elections, "grouped by party", sep=" ")) +
+        geom_bar(stat='identity')
+    } else {
+      ggplot(plot.data, aes(state_name, elections_total)) +
+        theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+        labs(x="State", y="Votes", title=paste("Votes by State in", input$elections, sep=" ")) +
+        geom_bar(stat='identity')
+    }
     
-    ggplot(plot.data, aes(state_name, elections_total)) +
-      theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-      geom_bar(stat='identity')
+    
   })
   
   output$plot <- renderPlot(

@@ -12,14 +12,14 @@ navbarPage("US Elections", id="nav",
       leafletOutput("map", width="100%", height="100%"),
       
       absolutePanel(id="controls", class="panel panel-default", fixed=TRUE,
-          draggable=TRUE, top=60, left="auto", right=20, bottom="auto",
-          width=330, height="auto",
-        
+            draggable=TRUE, top=60, left="auto", right=20, bottom="auto",
+            width=330, height="auto",
         h2("US Elections")
-        
       ),
       tags$div(id="cite",
-        'Data compiled for ', tags$em('US election 2016: How to download county-level results data'), ' by Simon Rogers.'
+        'Data compiled for ', tags$a('US election 2016: How to download county-level results data',
+                                     href='https://simonrogers.net/2016/11/16/us-election-2016-how-to-download-county-level-results-data/'),
+        ' by Simon Rogers.'
       )
     )
   ),
@@ -43,7 +43,9 @@ navbarPage("US Elections", id="nav",
   tabPanel("Visualizations",
     fluidRow(
       column(3,
-             selectInput("elections", "Election Year", c("2008"="2008", "2012"="2012", "2016"="2016")))
+             selectInput("elections", "Election Year", c("2008"="2008", "2012"="2012", "2016"="2016"))),
+      column(3,
+             checkboxInput("byparty", "Color by Party", FALSE))
     ),
     plotOutput("plot", height = 600)
   ),

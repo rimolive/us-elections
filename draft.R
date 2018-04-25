@@ -10,6 +10,7 @@ library(jsonlite)
 library(dplyr)
 library(stringr)
 library(ggplot2)
+library(tidyr)
 
 # Load basic datasets to get all geographic data
 states.data = read.csv('data/us-states.csv')
@@ -99,9 +100,33 @@ ggplot(plot.data, aes(state_name, total_2008)) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   geom_bar(stat='identity')
 
-states <- c("Alabama")
 
-counties <- filter(us_elections_history, state_name %in% states) %>%
-  `$`('county_name') %>%
-  unique() %>%
-  sort()
+glimpse(us_elections_history)
+
+
+us_elections_history <- us_elections_history %>%
+  gather("party_2008", "total_votes_2008", c("dem_2008", "gop_2008", "oth_2008")) %>%
+  gather("party_2012", "total_votes_2012", c("dem_2012", "gop_2012", "oth_2012")) %>%
+  gather("party_2016", "total_votes_2016", c("dem_2016", "gop_2016", "oth_2016"))
+
+
+us_elections_history <- us_elections_history %>%
+  select(fips_code, fips_class, state_code, state_name, capital, county_name, party_2008, total_votes_2008, party_2012, total_votes_2012, party_2016, total_votes_2016)
+
+us_elections_history <- us_elections_history %>%
+  mutate(party_2008 = ifelse(party_2008 == "dem_2008", "dem", ifelse(party_2008 == "gop_2008", "gop", "other"))) %>%
+  mutate(party_2012 = ifelse(party_2012 == "dem_2012", "dem", ifelse(party_2012 == "gop_2012", "gop", "other"))) %>%
+  mutate(party_2016 = ifelse(party_2016 == "dem_2016", "dem", ifelse(party_2016 == "gop_2016", "gop", "other")))
+
+votes_2008 <- distinct(us_elections_history, fips_code, fips_class, state_code, state_name, capital, county_name, party_2008, total_votes_2008)
+votes_2012 <- distinct(us_elections_history, fips_code, fips_class, state_code, state_name, capital, county_name, party_2012, total_votes_2012)
+votes_2016 <- distinct(us_elections_history, fips_code, fips_class, state_code, state_name, capital, county_name, party_2016, total_votes_2016)
+
+
+votes <- inner_join(votes_2008, votes_2012, by=c("fips_code", "fips_class", "state_code", "state_name", "capital", "county_name", "party"))
+
+votes <- inner_join(votes, votes_2016, by=c("fips_code", "fips_class", "state_code", "state_name", "capital", "county_name", "party"))
+
+votes <- votes %>%
+  select(fips_code, fips_class, state_code, state_name, capital, county_name, party, total_votes_2008, total_votes_2012, total_votes_2016)
+
