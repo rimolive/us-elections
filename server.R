@@ -21,9 +21,9 @@ function(input, output, session) {
       ) %>%
       setView(lng = -93.85, lat = 37.45, zoom = 4) %>%
       addPolygons(stroke = FALSE, smoothFactor = 0.3, fillOpacity = 1,
-                  fillColor = ~pal(total_2008),
-                  label = ~paste0(NAME, ": ", formatC(total_2008, big.mark = ","))) %>%
-      addLegend("bottomright", pal = pal, values = ~total_2008, opacity = 1.0,
+                  fillColor = ~pal(as.numeric(total_2008)),
+                  label = ~paste0(NAME, ": ", formatC(as.numeric(total_2008), big.mark = ","))) %>%
+      addLegend("bottomright", pal = pal, values = ~as.numeric(total_2008), opacity = 1.0,
                 labFormat = labelFormat(transform = function(x) x))
   })
   
