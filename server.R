@@ -6,8 +6,8 @@ library(dplyr)
 library(ggplot2)
 
 set.seed(100)
-counties.data <- rgdal::readOGR("data/us-elections.geojson", "OGRGeoJSON")
-pal <- colorNumeric(c('#543005','#8c510a','#bf812d','#dfc27d','#f6e8c3','#f5f5f5','#c7eae5','#80cdc1','#35978f','#01665e','#003c30'), 1:3000000)
+counties.data <- rgdal::readOGR("data/us-elections.geojson", "us-elections")
+pal <- colorFactor(c('#543005','#8c510a','#bf812d','#dfc27d','#f6e8c3','#f5f5f5','#c7eae5','#80cdc1','#35978f','#01665e','#003c30'), 1:30000)
 
 
 function(input, output, session) {
@@ -21,9 +21,9 @@ function(input, output, session) {
       ) %>%
       setView(lng = -93.85, lat = 37.45, zoom = 4) %>%
       addPolygons(stroke = FALSE, smoothFactor = 0.3, fillOpacity = 1,
-                  fillColor = ~pal(as.numeric(total_2008)),
-                  label = ~paste0(NAME, ": ", formatC(as.numeric(total_2008), big.mark = ","))) %>%
-      addLegend("bottomright", pal = pal, values = ~as.numeric(total_2008), opacity = 1.0,
+                  fillColor = ~pal(total_2008),
+                  label = ~paste0(NAME, ": ", formatC(total_2008, big.mark = ","))) %>%
+      addLegend("bottomright", pal = pal, values = ~total_2008, opacity = 1.0,
                 labFormat = labelFormat(transform = function(x) x))
   })
   
