@@ -9,7 +9,7 @@ set.seed(100)
 # For some reason, specify the layer does not work.
 #counties.data <- rgdal::readOGR("data/us-elections.geojson", "us-elections")
 counties.data <- rgdal::readOGR("data/us-elections.geojson")
-pal <- colorFactor(c('#543005','#8c510a','#bf812d','#dfc27d','#f6e8c3','#f5f5f5','#c7eae5','#80cdc1','#35978f','#01665e','#003c30'), 1:30000)
+pal <- colorNumeric(c('#543005','#8c510a','#bf812d','#dfc27d','#f6e8c3','#f5f5f5','#c7eae5','#80cdc1','#35978f','#01665e','#003c30'), 1:48000)
 
 
 function(input, output, session) {
