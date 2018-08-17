@@ -11,11 +11,11 @@ navbarPage("US Elections", id="nav",
       
       leafletOutput("map", width="100%", height="100%"),
       
-      absolutePanel(id="controls", class="panel panel-default", fixed=TRUE,
-            draggable=TRUE, top=60, left="auto", right=20, bottom="auto",
-            width=330, height="auto",
-        h2("US Elections")
-      ),
+      #absolutePanel(id="controls", class="panel panel-default", fixed=TRUE,
+      #      draggable=TRUE, top=60, left="auto", right=20, bottom="auto",
+      #      width=330, height="auto",
+      #  h2("US Elections")
+      #),
       tags$div(id="cite",
         'Data compiled for ', tags$a('US election 2016: How to download county-level results data',
                                      href='https://simonrogers.net/2016/11/16/us-election-2016-how-to-download-county-level-results-data/'),
